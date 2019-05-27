@@ -1,6 +1,10 @@
-/**
- * main.c
+/*
+ * sarode.c
+ *
+ *  Created on: 27-May-2019
+ *      Author: Mayuresh
  */
+
 #include<stdint.h>
 #include<stdbool.h>
 #include"inc/hw_memmap.h"
@@ -15,21 +19,21 @@
 int main(void)
 {
     char k;
-
-    SysCtlPeripheralEnable(GPIO_PORTA_BASE);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    UARTEnable(UART0_BASE);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     GPIOPinConfigure(GPIO_PA0_U0RX);
     GPIOPinConfigure(GPIO_PA1_U0TX);
-    UARTEnable(UART0_BASE);
     GPIOPinTypeUART(GPIO_PORTA_BASE,GPIO_PIN_0 | GPIO_PIN_1);
+    UARTEnable(UART0_BASE);
     UARTConfigSetExpClk(UART0_BASE,SysCtlClockGet(), 9600,(UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
-
-
-    if(UARTCharsAvail(GPIO_PORTA_BASE))
+while(1)
+{
+    if(UARTCharsAvail((UART0_BASE)))
     {
-       k=UARTCharGetNonBlocking(GPIO_PORTA_BASE);
-       UARTCharPut(GPIO_PORTA_BASE,k);
+       k=UARTCharGetNonBlocking(UART0_BASE);
+       UARTCharPut(UART0_BASE,k);
     }
+
+}
     return 0;
 }
